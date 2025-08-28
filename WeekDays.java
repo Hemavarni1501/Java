@@ -39,5 +39,6 @@ class WeekDays{
             }
         }
         System.out.println("Thankyou!");
+        obj.close();
     }
 }
