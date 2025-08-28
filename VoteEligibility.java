@@ -12,5 +12,6 @@ class VoteEligibility{
             System.out.println("Not Eligible for Voting \n Age="+age);
         }
         System.out.println("Thankyou!");
+        obj.close();
     }
 }
