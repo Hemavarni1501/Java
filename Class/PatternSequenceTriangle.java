@@ -15,4 +15,5 @@ public class PatternSequenceTriangle {
 
         sc.close();
     }
+    
 }
