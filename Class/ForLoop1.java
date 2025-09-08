@@ -11,5 +11,6 @@ public class ForLoop1 {
             }
             System.out.println();
         }
+        sc.close();
     }
 }

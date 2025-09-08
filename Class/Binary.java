@@ -14,5 +14,6 @@ public class Binary {
             }
             System.out.println();
         }
+        sc.close();
     }
 }

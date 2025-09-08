@@ -23,5 +23,6 @@ public class HourGlass {
                 }
                 System.out.println();
             }
+        sc.close();
     }
 }

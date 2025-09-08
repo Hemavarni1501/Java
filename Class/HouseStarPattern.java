@@ -37,5 +37,6 @@ public class HouseStarPattern {
             }
             System.out.println();
         }
+        sc.close();
     }
 }
