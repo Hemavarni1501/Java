@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Q5_MileageCalculator {
+public class MileageCalculator {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         double start = sc.nextDouble();
