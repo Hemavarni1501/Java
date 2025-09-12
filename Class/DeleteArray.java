@@ -10,7 +10,7 @@ public class DeleteArray {
         for(int i=0;i<size;i++){
             arr[i]=obj.nextInt();
         }
-        System.out.println("Enter the element to be Deleted: ");
+        /*System.out.println("Enter the element to be Deleted: ");
         int ele=obj.nextInt();
         for(int i=0;i<size;i++){
             if(arr[i]==ele){
@@ -20,9 +20,14 @@ public class DeleteArray {
                 size--;
                 i--;
             }
+        }*/
+        System.out.println("Enter the Position to Delete:");
+        int pos=obj.nextInt();
+        for(int i=pos;i<size;i++){
+            arr[i-1]=arr[i];
         }
         System.out.println("Array after Deletion: ");
-        for(int i=0;i<size;i++){   
+        for(int i=0;i<size-1;i++){   
             System.out.print(arr[i]+" ");
         }
         obj.close();
