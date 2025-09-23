@@ -6,7 +6,7 @@ public class ArrayPrime {
     int num = sc.nextInt();
     int[] a=new int[num];
     System.out.println("Enter Elements of Array:");
-    int i;
+    int i,b=0;
     for(i=0;i<num;i++){
         a[i]=sc.nextInt();
     }
@@ -25,9 +25,16 @@ public class ArrayPrime {
         }
     }
     if(isPrime){
+        b++;
         System.out.println(a[j]);
     }
 }
+    if(b==0){
+        System.out.println("No Prime Numbers in the Array");
+    }
+    else{
+        System.out.println("Total Prime Numbers in the Array: "+b);
+    }
   sc.close();
 }
     
