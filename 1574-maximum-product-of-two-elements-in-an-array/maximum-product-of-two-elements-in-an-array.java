@@ -6,10 +6,11 @@ class Solution {
                 m2=m1;
                 m1=nums[i];
             }
-            else if(nums[i]>m2){
+            else if(m2<nums[i]){
                 m2=nums[i];
             }
         }
-        return (m1-1)*(m2-1);
+        int a=(m1-1)*(m2-1);
+        return a;
     }
 }
