@@ -1,72 +1,87 @@
 class Solution {
 
     public String lexGreaterPermutation(String s, String target) {
-        int[] cnt = new int[26];
-        for (char c : s.toCharArray()) {
-            cnt[c - 'a']++;
+
+        int n = s.length();
+
+        // Frequency of characters in s
+        int[] count = new int[26];
+
+        for (char ch : s.toCharArray()) {
+            count[ch - 'a']++;
         }
 
-        StringBuilder res = new StringBuilder();
-        int n = target.length();
-        for (int i = 0; i < n; i++) {
-            int targetChar = target.charAt(i) - 'a';
+        /*
+         * First, try to match target from left to right.
+         *
+         * If we can match:
+         * target[0], target[1], ..., target[i-1]
+         *
+         * then count[] contains all unused characters.
+         */
+        int matched = 0;
 
-            // Case 1: First try to place the same character as target[i] at the current position
-            if (cnt[targetChar] > 0) {
-                cnt[targetChar]--;
-                // Check if the remaining characters can form a string greater than target[i+1:]
-                if (canFormGreater(cnt, target, i + 1)) {
-                    res.append(target.charAt(i));
-                    continue;
-                }
-                // Cannot form a larger string, backtrack
-                cnt[targetChar]++;
+        while (matched < n) {
+
+            int c = target.charAt(matched) - 'a';
+
+            if (count[c] == 0) {
+                break;
             }
 
-            // Case 2: Place a character greater than target[i] at the current position
-            for (int j = targetChar + 1; j < 26; j++) {
-                if (cnt[j] > 0) {
-                    cnt[j]--;
-                    res.append((char) ('a' + j));
-                    // Fill remaining positions with the smallest lexicographical order
-                    res.append(getMinString(cnt));
-                    return res.toString();
-                }
+            count[c]--;
+            matched++;
+        }
+
+        /*
+         * Now we need to make the answer strictly greater.
+         *
+         * Start from the rightmost possible position and move left.
+         */
+        for (int pos = Math.min(matched, n - 1); pos >= 0; pos--) {
+
+            /*
+             * When we move to pos, the character target[pos]
+             * has to become available again.
+             *
+             * This is necessary because it was used while matching
+             * the target prefix.
+             */
+            if (pos < matched) {
+                count[target.charAt(pos) - 'a']++;
             }
 
-            // No feasible solution found, return directly
-            return "";
+            int targetChar = target.charAt(pos) - 'a';
+
+            // Find the smallest available character > target[pos]
+            for (int c = targetChar + 1; c < 26; c++) {
+
+                if (count[c] > 0) {
+
+                    // Choose this character
+                    count[c]--;
+
+                    StringBuilder result = new StringBuilder();
+
+                    // Prefix remains equal to target
+                    result.append(target, 0, pos);
+
+                    // Make this position slightly larger
+                    result.append((char) ('a' + c));
+
+                    // Put remaining characters in ascending order
+                    for (int x = 0; x < 26; x++) {
+                        while (count[x] > 0) {
+                            result.append((char) ('a' + x));
+                            count[x]--;
+                        }
+                    }
+
+                    return result.toString();
+                }
+            }
         }
 
         return "";
-    }
-
-    // Check if the remaining characters can form a string greater than the suffix.
-    private boolean canFormGreater(int[] cnt, String target, int start) {
-        String maxStr = getMaxString(cnt);
-        String suffix = target.substring(start);
-        return maxStr.compareTo(suffix) > 0;
-    }
-
-    // Get the maximum lexicographical string (in descending order)
-    private String getMaxString(int[] cnt) {
-        StringBuilder res = new StringBuilder();
-        for (int i = 25; i >= 0; i--) {
-            if (cnt[i] > 0) {
-                res.append(String.valueOf((char) ('a' + i)).repeat(cnt[i]));
-            }
-        }
-        return res.toString();
-    }
-
-    // Get the lexicographically smallest string (in ascending order)
-    private String getMinString(int[] cnt) {
-        StringBuilder res = new StringBuilder();
-        for (int i = 0; i < 26; i++) {
-            if (cnt[i] > 0) {
-                res.append(String.valueOf((char) ('a' + i)).repeat(cnt[i]));
-            }
-        }
-        return res.toString();
     }
 }
