@@ -1,108 +1,147 @@
-class Solution {
+class Solution{
+public String 
+    lexPalindromicPermutation(
+            String s, String target) {
 
-    public String lexPalindromicPermutation(String s, String target) {
         int n = s.length();
-        // Special case: length of 1
-        if (n == 1) {
-            return s.compareTo(target) > 0 ? s : "";
+
+        
+        int[] freq = new int[26];
+
+        for (char ch : s.toCharArray()) {
+            freq[ch - 'a']++;
         }
 
-        // Count the frequency of each character
-        int[] cnt = new int[26];
-        for (char c : s.toCharArray()) {
-            cnt[c - 'a']++;
-        }
+        // A palindrome can have at most one odd frequency
+        int odd = 0;
+        int middle = -1;
 
-        // Check if it can form a palindrome and record the characters with odd occurrences
-        String oddChar = "";
         for (int i = 0; i < 26; i++) {
-            if (cnt[i] % 2 == 1) {
-                // More than one character appears an odd number of times, cannot form a palindrome
-                if (oddChar != "") {
-                    return "";
-                }
-                oddChar = String.valueOf((char) ('a' + i));
+            if (freq[i] % 2 == 1) {
+                odd++;
+                middle = i;
             }
-            cnt[i] /= 2; // It takes only half the characters to construct the left half
         }
 
-        StringBuilder prefix = new StringBuilder();
+        if (odd > 1) {
+            return "";
+        }
 
-        // Construct the left part of each digit greedily
-        for (int i = 0; i < n / 2; i++) {
-            boolean found = false;
-            // Try to place the smallest character in lexicographical order
-            for (int j = 0; j < 26; j++) {
-                if (cnt[j] == 0) {
-                    continue;
-                }
+        int halfLen = n / 2;
 
-                cnt[j]--;
-                if (
-                    check(
-                        prefix.toString(),
-                        (char) ('a' + j),
-                        cnt,
-                        oddChar,
-                        target
-                    )
-                ) {
-                    // If the constructed palindrome is greater than target, choose the character
-                    prefix.append((char) ('a' + j));
-                    found = true;
+        // Number of each character available in the first half
+        int[] half = new int[26];
+
+        for (int i = 0; i < 26; i++) {
+            half[i] = freq[i] / 2;
+        }
+
+        /*
+         * First check whether target's first half
+         * can itself be used as the palindrome's first half.
+         */
+        int[] remaining = half.clone();
+        boolean possible = true;
+
+        for (int i = 0; i < halfLen; i++) {
+            int c = target.charAt(i) - 'a';
+
+            if (remaining[c] == 0) {
+                possible = false;
+                break;
+            }
+
+            remaining[c]--;
+        }
+
+        if (possible) {
+            String firstHalf = target.substring(0, halfLen);
+
+            String candidate = makePalindrome(firstHalf, middle);
+
+            if (candidate.compareTo(target) > 0) {
+                return candidate;
+            }
+        }
+
+        /*
+         * Find the smallest first half greater than
+         * target's first half.
+         *
+         * Try changing the rightmost possible position first.
+         */
+        for (int i = halfLen - 1; i >= 0; i--) {
+
+            remaining = half.clone();
+            boolean ok = true;
+
+            // Match target[0 ... i-1]
+            for (int j = 0; j < i; j++) {
+
+                int c = target.charAt(j) - 'a';
+
+                if (remaining[c] == 0) {
+                    ok = false;
                     break;
-                } else {
-                    cnt[j]++; // Not meeting the conditions, reset the counter
                 }
-            }
-            if (!found) {
-                return ""; // Cannot construct a palindrome larger than target
+
+                remaining[c]--;
             }
 
-            if (prefix.charAt(i) > target.charAt(i)) {
-                // prefix is already greater than target
-                StringBuilder left = new StringBuilder(prefix);
-                for (int j = 0; j < 26; j++) {
-                    for (int k = 0; k < cnt[j]; k++) {
-                        left.append((char) ('a' + j));
+            if (!ok) {
+                continue;
+            }
+
+            // At position i, choose the smallest
+            // character strictly greater than target[i]
+            int targetChar = target.charAt(i) - 'a';
+
+            for (int c = targetChar + 1; c < 26; c++) {
+
+                if (remaining[c] > 0) {
+
+                    remaining[c]--;
+
+                    StringBuilder firstHalf = new StringBuilder();
+
+                    // Prefix equal to target
+                    firstHalf.append(target, 0, i);
+
+                    // Bigger character
+                    firstHalf.append((char) ('a' + c));
+
+                    // Fill remaining positions with smallest chars
+                    for (int k = 0; k < 26; k++) {
+                        while (remaining[k] > 0) {
+                            firstHalf.append((char) ('a' + k));
+                            remaining[k]--;
+                        }
                     }
+
+                    return makePalindrome(firstHalf.toString(), middle);
                 }
-                String palindrome =
-                    left.toString() +
-                    oddChar +
-                    new StringBuilder(left).reverse().toString();
-                return palindrome;
             }
         }
 
-        // Construct the final palindrome string
-        String ans =
-            prefix.toString() +
-            oddChar +
-            new StringBuilder(prefix).reverse().toString();
-        return ans;
+        return "";
     }
 
-    private boolean check(
-        String prefix,
-        char c,
-        int[] cnt,
-        String oddChar,
-        String target
-    ) {
-        StringBuilder left = new StringBuilder(prefix);
-        left.append(c);
-        for (int i = 25; i >= 0; i--) {
-            for (int k = 0; k < cnt[i]; k++) {
-                left.append((char) ('a' + i));
-            }
+    private String makePalindrome(String firstHalf, int middle) {
+
+        StringBuilder ans = new StringBuilder();
+
+        ans.append(firstHalf);
+
+        // Middle character for odd length
+        if (middle != -1) {
+            ans.append((char) ('a' + middle));
         }
 
-        String palindrome =
-            left.toString() +
-            oddChar +
-            new StringBuilder(left).reverse().toString();
+        // Reverse first half
+        for (int i = firstHalf.length() - 1; i >= 0; i--) {
+            ans.append(firstHalf.charAt(i));
+        }
 
-        return palindrome.compareTo(target) > 0;
+        return ans.toString();
     }
-}
+}    
