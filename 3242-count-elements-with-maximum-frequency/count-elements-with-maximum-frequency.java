@@ -1,20 +1,19 @@
 class Solution {
     public int maxFrequencyElements(int[] nums) {
-        Map<Integer, Integer> m=new HashMap<>();
-        for(int i=0;i<nums.length;i++){
-            m.put(nums[i], m.getOrDefault(nums[i],0)+1);
-        }
-        int c=0,max=0;
-        for(int i:m.values()){
-            if(max<i){
-                max=i;
+        int[] count = new int[101];
+        int maxFreq = 0;
+        for (int num: nums) {
+            count[num]++;
+            if (count[num] > maxFreq) {
+                maxFreq = count[num];
             }
         }
-        for(int i:m.values()){
-            if(i==max){
-                c+=max;
+        int answer = 0;
+        for (int i = 0; i <= 100; i++) {
+            if (count[i] == maxFreq) {
+                answer += maxFreq;
             }
         }
-        return c;
+        return answer;
     }
 }
