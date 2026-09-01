@@ -1,24 +1,27 @@
 class Solution {
-    public String convert(String s, int numRows) {
-        if (numRows == 1 || s.length() <= numRows) return s;
-
-        StringBuilder[] rows = new StringBuilder[numRows];
-        for (int i = 0; i < numRows; i++) rows[i] = new StringBuilder();
-
-        int idx = 0, step = 1;
-
-        for (char c : s.toCharArray()) {
-            rows[idx].append(c);
-
-            if (idx == 0) step = 1;
-            else if (idx == numRows - 1) step = -1;
-
-            idx += step;
+    public String convert(String s, int n) {
+        if(n==1||n>s.length()){
+            return s;
         }
-
-        StringBuilder res = new StringBuilder();
-        for (StringBuilder sb : rows) res.append(sb);
-
-        return res.toString();
+        String[] a=new String[n];
+        for(int i=0;i<n;i++){
+            a[i]="";
+        }
+        int l=2*n-2;
+        for(int i=0;i<s.length();i++){
+            int p=i%l;
+            int row;
+            if(p<n){
+                row=p;
+            }else{
+                row=l-p;
+            }
+            a[row]+=s.charAt(i);
+        }
+        String result="";
+        for(int i=0;i<n;i++){
+            result+=a[i];
+        }
+        return result;
     }
 }
