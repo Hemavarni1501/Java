@@ -1,12 +1,11 @@
 class Solution {
-    public int[] concatWithReverse(int[] nums) {
-        int[] a=new int[nums.length*2];
-        for(int i=0;i<nums.length;i++){
-            a[i]=nums[i];
-        }
-        int k=nums.length-1;
-        for(int i=nums.length;i<a.length;i++){
-            a[i]=nums[k--];
+    public int[] concatWithReverse(int[] n) {
+        int[] a=new int[2*n.length];
+        for(int i=0;i<n.length;i++){
+            a[i]=n[i];
+        } int j=n.length-1;
+        for(int i=n.length;i<a.length;i++){
+            a[i]=n[j--];
         }
         return a;
     }
