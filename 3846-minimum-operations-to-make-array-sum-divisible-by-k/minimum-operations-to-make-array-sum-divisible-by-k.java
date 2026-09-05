@@ -4,11 +4,6 @@ class Solution {
         for(int i:nums){
             s+=i;
         }
-        if(s%k==0){
-            return 0;
-        }
-        else {
             return s%k;
-        }
     }
 }
