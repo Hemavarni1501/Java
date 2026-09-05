@@ -9,6 +9,6 @@ class Solution {
             }
             a.append((char) ('z' - (s % 26)));
         }
-        return new String(a);
+        return a.toString();
     }
 }
