@@ -1,15 +1,9 @@
 class Solution {
-       public int maxDistinct(String s) {
-    boolean[] arr = new boolean[26];
-    int count = 0; 
-    
-    for (char ch : s.toCharArray()) {
-        int x = ch - 'a';
-        if (!arr[x]) { 
-            arr[x] = true;
-            count++;
+    public int maxDistinct(String s) {
+        Set<Character> a=new HashSet<>();
+        for(char x:s.toCharArray()){
+            a.add(x);
         }
+        return a.size();
     }
-    return count;
-}
 }
