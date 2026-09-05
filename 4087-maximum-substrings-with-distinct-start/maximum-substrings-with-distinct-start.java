@@ -1,9 +1,16 @@
 class Solution {
-    public int maxDistinct(String s) {
-        Set<Character> a=new HashSet<>();
-        for(char x:s.toCharArray()){
-            a.add(x);
-        }
-        return a.size();
+  public int maxDistinct(String s) {
+    boolean[] isViewed = new boolean[26];
+    int result = 0;
+    for (int i = 0; i < s.length() && result != 26; i++) {
+      int index = s.charAt(i) - 'a';
+      if (isViewed[index])
+        continue;
+
+      isViewed[index] = true;
+      result++;
     }
+
+    return result;
+  }
 }
