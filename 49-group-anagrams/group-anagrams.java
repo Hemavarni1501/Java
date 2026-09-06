@@ -14,8 +14,6 @@ class Solution {
             }
             curr.add(s);
         }
-        List<List<String>> groupedAnagrams = new ArrayList<>(map.values());
-        groupedAnagrams.sort((list1, list2) -> Integer.compare(list1.size(), list2.size()));
-        return groupedAnagrams;
+        return new ArrayList<>(map.values());
     }
 }
