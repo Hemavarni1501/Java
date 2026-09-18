@@ -1,67 +1,63 @@
-class Solution {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+class Solution {
     public List<String> maxNumOfSubstrings(String s) {
-        Seg[] seg = new Seg[26];
-        for (int i = 0; i < 26; ++i) {
-            seg[i] = new Seg(-1, -1);
-        }
-        // Preprocess the left and right endpoints.
-        for (int i = 0; i < s.length(); ++i) {
-            int charIdx = s.charAt(i) - 'a';
-            if (seg[charIdx].left == -1) {
-                seg[charIdx].left = seg[charIdx].right = i;
-            } else {
-                seg[charIdx].right = i;
+        int n = s.length();
+        int[] first = new int[26];
+        int[] last = new int[26];
+        
+        Arrays.fill(first, -1);
+        Arrays.fill(last, -1);
+        
+        for (int i = 0; i < n; i++) {
+            int c = s.charAt(i) - 'a';
+            if (first[c] == -1) {
+                first[c] = i;
             }
+            last[c] = i;
         }
-        for (int i = 0; i < 26; ++i) {
-            if (seg[i].left != -1) {
-                for (int j = seg[i].left; j <= seg[i].right; ++j) {
-                    int charIdx = s.charAt(j) - 'a';
-                    if (
-                        seg[i].left <= seg[charIdx].left &&
-                        seg[charIdx].right <= seg[i].right
-                    ) {
-                        continue;
-                    }
-                    seg[i].left = Math.min(seg[i].left, seg[charIdx].left);
-                    seg[i].right = Math.max(seg[i].right, seg[charIdx].right);
-                    j = seg[i].left;
+        
+        List<int[]> intervals = new ArrayList<>();
+        
+        for (int i = 0; i < 26; i++) {
+            if (first[i] != -1) {
+                int right = getValidRightEnd(s, i, first, last);
+                if (right != -1) {
+                    intervals.add(new int[]{first[i], right});
                 }
             }
         }
-        // Greedily select intervals.
-        Arrays.sort(seg);
-        List<String> ans = new ArrayList<>();
-        int end = -1;
-        for (Seg segment : seg) {
-            int left = segment.left,
-                right = segment.right;
-            if (left == -1) {
-                continue;
-            }
-            if (end == -1 || left > end) {
-                end = right;
-                ans.add(s.substring(left, right + 1));
+        
+        intervals.sort((a, b) -> a[1] - b[1]);
+        
+        List<String> result = new ArrayList<>();
+        int prevRight = -1;
+        
+        for (int[] interval : intervals) {
+            if (interval[0] > prevRight) {
+                result.add(s.substring(interval[0], interval[1] + 1));
+                prevRight = interval[1];
             }
         }
-        return ans;
+        
+        return result;
     }
-
-    class Seg implements Comparable<Seg> {
-
-        int left, right;
-
-        public Seg(int left, int right) {
-            this.left = left;
-            this.right = right;
-        }
-
-        public int compareTo(Seg rhs) {
-            if (right == rhs.right) {
-                return rhs.left - left;
+    
+    private int getValidRightEnd(String s, int charIdx, int[] first, int[] last) {
+        int left = first[charIdx];
+        int right = last[charIdx];
+        
+        for (int j = left; j <= right; j++) {
+            int c = s.charAt(j) - 'a';
+            
+            if (first[c] < left) {
+                return -1; 
             }
-            return right - rhs.right;
+            right = Math.max(right, last[c]);
         }
+        
+        return right;
     }
 }
