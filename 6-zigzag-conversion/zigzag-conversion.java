@@ -1,0 +1,24 @@
+class Solution {
+    public String convert(String s, int numRows) {
+        if (numRows == 1 || numRows >= s.length()) {
+            return s;
+        }
+
+        int n = s.length();
+        char[] result = new char[n];
+        int cycleLen = 2 * numRows - 2;
+        int idx = 0;
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j + i < n; j += cycleLen) {
+                result[idx++] = s.charAt(j + i);
+                
+                if (i != 0 && i != numRows - 1 && j + cycleLen - i < n) {
+                    result[idx++] = s.charAt(j + cycleLen - i);
+                }
+            }
+        }
+
+        return new String(result);
+    }
+}
