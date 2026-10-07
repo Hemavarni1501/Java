@@ -8,7 +8,7 @@ class Solution {
           m.computeIfAbsent(key, k->new ArrayList<>()).add(st[i]);
         }
         List<List<String>> l = new ArrayList<>(m.values());
-        l.sort((list1, list2) -> Integer.compare(list1.size(), list2.size()));
-        return new ArrayList<>(m.values());
+        //l.sort((list1, list2) -> Integer.compare(list1.size(), list2.size()));
+        return l;
     }
 }
