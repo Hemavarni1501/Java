@@ -11,8 +11,9 @@ class Solution {
           i=j;
           z=true; j++;
         }else{
-          z=false; j=i+1;
-          c=0;
+          c=j-i-1;
+          i=j;
+          j++;
         }
         m=Math.max(m,c);
       }
