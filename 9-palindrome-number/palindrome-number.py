@@ -1,5 +1,10 @@
-class Solution(object):
-    def isPalindrome(self, x):
-        n=str(x)
-        r=n[::-1]
-        return r==n
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        r=0
+        t=x
+        while(x>0):
+            d=x%10
+            r=r*10+d
+            x=x//10
+        return r==t
+        
