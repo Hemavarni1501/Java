@@ -1,11 +1,12 @@
 class Solution:
-    def reverse(self, x: int) -> int:
-        INT_MIN = -(2**31)
-        INT_MAX = (2**31) - 1
+    def reverse(self, num: int) -> int:
+        min=-2**31
+        max=2**31-1
         r=0
-        t=abs(x)
+        t=abs(num)
         while(t>0):
             d=t%10
             r=r*10+d
             t=t//10
-        return 0 if r<=INT_MIN or r>=INT_MAX else r if x>=0 else -r
+        r=r*-1 if num<0 else r
+        return 0 if r<min or r>max else r
