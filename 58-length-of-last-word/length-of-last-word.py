@@ -1,5 +1,9 @@
 class Solution:
     def lengthOfLastWord(self, s: str) -> int:
         x=s.strip()
-        return len(x) if x.rfind(" ")==-1 else len(x)-x.rfind(" ")-1
-        
+        c=0
+        for i in range(len(x)-1,-1,-1):
+            if (x[i]==' '):
+                break
+            c=c+1
+        return c
