@@ -6,8 +6,7 @@ class Solution {
             Set<Integer> a=new HashSet<>();
             for(int j=i;j<n;j++){
                 a.add(nums.get(j));
-                int c=a.size();
-                s+=c*c;
+                s+=a.size()*a.size();
             }
         }
         return s;
