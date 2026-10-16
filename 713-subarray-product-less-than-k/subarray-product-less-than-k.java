@@ -6,7 +6,8 @@ class Solution {
         for(int i=0,j=0;j<n;j++){
             p*=nums[j];
             while(p>=k){
-                p/=nums[i++];
+                p/=nums[i];
+                i++;
             }
             c+=j-i+1;
         }
