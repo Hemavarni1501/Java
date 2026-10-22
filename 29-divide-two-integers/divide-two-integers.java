@@ -1,14 +1,16 @@
-class Solution{
-    public int divide(int a,int b){
-        if(b==1) return a;
-        if(b==-1) return a==Integer.MIN_VALUE?Integer.MAX_VALUE:-a;
-        long x=Math.abs((long)a),y=Math.abs((long)b),r=0;
-        for(int i=31;i>=0;i--)
-            if((x>>i)>=y){
-                x-=y<<i;
-                r+=1L<<i;
-            }
-        r=(a^b)<0?-r:r;
-        return (int)r;
+class Solution {
+     public int divide(int dividend, int divisor) {
+        if (dividend == Integer.MIN_VALUE && divisor == -1) return Integer.MAX_VALUE;
+        boolean negative = dividend < 0 ^ divisor < 0; 
+        dividend = Math.abs(dividend);
+        divisor = Math.abs(divisor);
+        int quotient = 0, subQuot = 0;
+        
+        while (dividend - divisor >= 0) {
+            for (subQuot = 0; dividend - (divisor << subQuot << 1) >= 0; subQuot++);
+            quotient += 1 << subQuot;
+            dividend -= divisor << subQuot; 
+        }
+        return negative ? -quotient : quotient;
     }
 }
