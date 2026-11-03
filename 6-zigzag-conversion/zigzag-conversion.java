@@ -1,24 +1,24 @@
 class Solution {
     public String convert(String s, int numRows) {
-        if (numRows == 1 || numRows >= s.length()) {
-            return s;
+        if (numRows == 1 || s.length() <= numRows) return s;
+
+        StringBuilder[] rows = new StringBuilder[numRows];
+        for (int i = 0; i < numRows; i++) rows[i] = new StringBuilder();
+
+        int idx = 0, step = 1;
+
+        for (char c : s.toCharArray()) {
+            rows[idx].append(c);
+
+            if (idx == 0) step = 1;
+            else if (idx == numRows - 1) step = -1;
+
+            idx += step;
         }
 
-        int n = s.length();
-        char[] result = new char[n];
-        int cycleLen = 2 * numRows - 2;
-        int idx = 0;
+        StringBuilder res = new StringBuilder();
+        for (StringBuilder sb : rows) res.append(sb);
 
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j + i < n; j += cycleLen) {
-                result[idx++] = s.charAt(j + i);
-                
-                if (i != 0 && i != numRows - 1 && j + cycleLen - i < n) {
-                    result[idx++] = s.charAt(j + cycleLen - i);
-                }
-            }
-        }
-
-        return new String(result);
+        return res.toString();
     }
 }
