@@ -2,23 +2,24 @@ class Solution {
     public String convert(String s, int numRows) {
         if (numRows == 1 || s.length() <= numRows) return s;
 
-        StringBuilder[] rows = new StringBuilder[numRows];
-        for (int i = 0; i < numRows; i++) rows[i] = new StringBuilder();
+        int n = s.length();
+        char[] result = new char[n];
+        int idx = 0;
+        int cycleLen = 2 * numRows - 2;
 
-        int idx = 0, step = 1;
+        for (int row = 0; row < numRows; row++) {
+            for (int j = row; j < n; j += cycleLen) {
+                // Append the main vertical column element
+                result[idx++] = s.charAt(j);
 
-        for (char c : s.toCharArray()) {
-            rows[idx].append(c);
-
-            if (idx == 0) step = 1;
-            else if (idx == numRows - 1) step = -1;
-
-            idx += step;
+                // Append the diagonal element (if not top or bottom row)
+                int diagIndex = j + cycleLen - 2 * row;
+                if (row != 0 && row != numRows - 1 && diagIndex < n) {
+                    result[idx++] = s.charAt(diagIndex);
+                }
+            }
         }
 
-        StringBuilder res = new StringBuilder();
-        for (StringBuilder sb : rows) res.append(sb);
-
-        return res.toString();
+        return new String(result);
     }
 }
